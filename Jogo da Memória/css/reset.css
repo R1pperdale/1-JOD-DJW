@@ -1,0 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    border: none;
+    font-family: 'Press Start 2P', cursive; /*Define a família de fontes para todos os elementos como 'Press Start 2P', com cursiva como fonte de fallback.*/
+  }

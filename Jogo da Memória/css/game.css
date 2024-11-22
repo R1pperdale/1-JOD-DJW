@@ -1,0 +1,76 @@
+main { 
+    display: flex; /*Define o layout do contêiner como flexível*/
+    flex-direction: column; /*Organiza os itens filhos em uma coluna*/
+    width: 100%; /*Define a largura do contêiner como 100% do elemento*/
+    align-items: center; /*Alinha os itens ao centro horizontalmente*/
+    justify-content: center; /*Alinha os itens ao centro verticalmente*/
+    padding: 20px 20px 50px; /*Adiciona padding ao contêiner*/
+  }
+  
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: gray; /*Define a cor de fundo*/
+    font-size: 1.2em; /*Define o tamanho da fonte como 1.2 vezes o tamanho da fonte padrão*/
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    margin: 0 0 30px; /*Adiciona uma margem inferior de 30px*/
+    border-radius: 5px; /*Define bordas arredondadas com raio de 5px*/
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /*Cria 7 colunas de igual largura*/
+    gap: 15px; /*Define um espaço de 15px entre os itens da grid*/
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    aspect-ratio: 3/4;
+    width: 100%;
+    border-radius: 5px;
+    position: relative;
+    transition: all 400ms ease; /*Adiciona uma transição suave de 400ms para todas as propriedades*/
+    transform-style: preserve-3d; /*Preserva a transformação 3D*/
+    background-color: white;
+  }
+  
+  .face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    border: 5px solid black;
+    border-radius: 5px;
+    transition: all 400ms ease;
+  }
+  
+  .front {
+    transform: rotateY(180deg);
+  }
+  
+  .back {
+    background-image: url('../images/cslogo.jpeg');
+    backface-visibility: hidden; /*Oculta a face posterior do elemento quando rotacionado*/
+  }
+  
+  .reveal-card {
+    transform: rotateY(180deg);
+  }
+  
+  .disabled-card {
+    filter: saturate(0);
+    opacity: 0.5;
+  }
+  
+  @media screen and (max-width:920px) {
+    .grid {
+      grid-template-columns: repeat(5, 1fr); /*Altera o layout da grid para ter 5 colunas de igual largura*/
+  
+    }
+  }

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>27/08/2024 - DJW - Bruno S.</title>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background-image: url("cenario2.jpg");
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: cover;
+        margin: 0;
+        overflow-x: hidden;
+      }
+      .boneco {
+        width: 50px;
+        height: 70px;
+        background-image: url("pokemon.png");
+        background-position: -65px -130px;
+        position: absolute;
+        top: 500px;
+        left: 50px;
+        z-index: 10;
+      }
+      .pidgey {
+        width: 90px;
+        height: 110px;
+        background-image: url("pidgey.png");
+        position: absolute;
+        top: 500px;
+        left: 800px;
+        background-size: 81px 110px;
+        z-index: 1;
+      }
+      .boneco.direita1 {
+        background-position: -10px -130px;
+      }
+      .boneco.direita2 {
+        background-position: -65px -130px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="boneco"></div>
+    <div class="pidgey"></div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var V = 25;
+      var boneco = $(".boneco");
+      var pidgey = $(".pidgey");
+      var positionIndex = 1;
+      var pageWidth = $(document).width();
+      var bonecoWidth = boneco.width();
+      var bonecoHeight = boneco.height();
+      var movingRight = false;
+      var intervalId;
+      var jumping = false;
+      var jumpHeight = 250;
+      var jumpSpeed = 20;
+      var originalTop = parseInt(boneco.css("top"));
+
+      function movimento() {
+        var currentLeft = parseInt(boneco.css("left")) || 0;
+        var bonecoOffset = boneco.offset();
+        var pidgeyOffset = pidgey.offset();
+        var bonecoRight = bonecoOffset.left + bonecoWidth;
+        var pidgeyRight = pidgeyOffset.left + pidgey.width();
+        var bonecoBottom = bonecoOffset.top + bonecoHeight;
+
+        if (movingRight) {
+          boneco.removeClass(function (index, className) {
+            return (className.match(/(^|\s)direita\d+/g) || []).join(" ");
+          });
+          boneco.addClass("direita" + positionIndex);
+
+          var newPosition = currentLeft + V;
+          if (newPosition + bonecoWidth > pageWidth) {
+            newPosition = pageWidth - bonecoWidth;
+          }
+
+          boneco.css("left", newPosition + "px");
+
+          positionIndex++;
+          if (positionIndex > 2) {
+            positionIndex = 1;
+          }
+
+          if (
+            bonecoRight > pidgeyOffset.left &&
+            bonecoOffset.left < pidgeyRight &&
+            bonecoOffset.top < pidgeyOffset.top + pidgey.height() &&
+            bonecoBottom > pidgeyOffset.top
+          ) {
+            var bonecoTop = parseInt(boneco.css("top"));
+            if (
+              bonecoTop + bonecoHeight <= pidgeyOffset.top ||
+              bonecoTop >= pidgeyOffset.top + pidgey.height() - jumpHeight
+            ) {
+              console.log();
+            } else {
+              boneco.css("left", currentLeft + "px");
+            }
+          }
+        }
+      }
+
+      function pular() {
+        if (jumping) return;
+        jumping = true;
+        var top = parseInt(boneco.css("top"));
+
+        var jumpUpInterval = setInterval(function () {
+          if (top > originalTop - jumpHeight) {
+            top -= jumpSpeed;
+            boneco.css("top", top + "px");
+          } else {
+            clearInterval(jumpUpInterval);
+
+            var jumpDownInterval = setInterval(function () {
+              if (top < originalTop) {
+                top += jumpSpeed;
+                boneco.css("top", top + "px");
+              } else {
+                clearInterval(jumpDownInterval);
+                jumping = false;
+              }
+            }, 20.5);
+          }
+        }, 20.5);
+      }
+
+      $(document).on("keydown", function (event) {
+        if (event.key === "d" || event.key === "D") {
+          if (!movingRight) {
+            movingRight = true;
+            intervalId = setInterval(movimento, 100);
+          }
+        }
+        if (event.key === " " && !jumping) {
+          pular();
+        }
+      });
+
+      $(document).on("keyup", function (event) {
+        if (event.key === "d" || event.key === "D") {
+          if (movingRight) {
+            movingRight = false;
+            clearInterval(intervalId);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
